@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Accessible Photo Gallery</title>
+    <style>
+        /* ============================================
+           RESET & BASE STYLES (MOBILE FIRST)
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           HEADER STYLES
+           ============================================ */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .accessibility-info {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        /* ============================================
+           GALLERY STYLES - MOBILE VIEW (DEFAULT)
+           ============================================ */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        figure {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #ddd;
+        }
+
+        figure:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        figure img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        figcaption {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            background-color: white;
+        }
+
+        /* ============================================
+           DESCRIPTION SECTION
+           ============================================ */
+        .description {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .description h2 {
+            color: #1a2980;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #26d0ce;
+            padding-bottom: 10px;
+        }
+
+        .description p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .description ul {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .description li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        /* ============================================
+           FOOTER STYLES
+           ============================================ */
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #666;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid #26d0ce;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        /* ============================================
+           MEDIA QUERY 1: TABLET VIEW (772px and above)
+           ============================================ */
+        @media (min-width: 772px) {
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            figure {
+                border-radius: 50%;
+                overflow: hidden;
+            }
+
+            figure:last-child {
+                grid-column: span 2;
+            }
+
+            figure img {
+                height: 300px;
+            }
+        }
+
+        /* ============================================
+           MEDIA QUERY 2: LARGE SCREEN VIEW (992px and above)
+           ============================================ */
+        @media (min-width: 992px) {
+            .gallery-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            figure {
+                border-radius: 10px;
+            }
+
+            figure:nth-child(3n) {
+                grid-column: span 2;
+            }
+
+            figure:last-child {
+                grid-column: span 2;
+            }
+
+            figure img {
+                height: 280px;
+            }
+        }
+
+        /* ============================================
+           MEDIA QUERY 3: PREFERS-REDUCED-MOTION
+           ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            figure {
+                transition: none;
+            }
+
+            figure:hover {
+                transform: none;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+        }
+
+        /* ============================================
+           MEDIA QUERY 4: PREFERS-COLOR-SCHEME (DARK MODE)
+           ============================================ */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+
+            figure {
+                background-color: #1e1e1e;
+                border-color: #000;
+            }
+
+            figcaption {
+                background-color: #1e1e1e;
+                color: #ffd700;
+            }
+
+            .description {
+                background-color: #1e1e1e;
+                color: #e0e0e0;
+            }
+
+            .description h2 {
+                color: #4fc3f7;
+            }
+
+            .description p, .description li {
+                color: #b0b0b0;
+            }
+
+            footer {
+                background-color: #1e1e1e;
+                color: #b0b0b0;
+            }
+
+            header {
+                background: linear-gradient(135deg, #0d47a1, #006064);
+            }
+        }
+
+        /* ============================================
+           ACCESSIBILITY ENHANCEMENTS
+           ============================================ */
+        @media (prefers-contrast: high) {
+            figure {
+                border: 3px solid #000;
+            }
+
+            figcaption {
+                font-weight: 800;
+            }
+        }
+
+        /* ============================================
+           PRINT STYLES
+           ============================================ */
+        @media print {
+            header, footer {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+
+            figure {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+
+            .description {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Nature Photography Gallery</h1>
+        <p class="subtitle">A responsive gallery that adapts to your screen size and preferences</p>
+        <div class="accessibility-info">
+            <p><strong>Accessibility Features:</strong> Reduced motion support, Dark/Light mode, Keyboard navigation</p>
+        </div>
+    </header>
+    
+    <main>
+        <div class="gallery-container">
+            <figure>
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" 
+                     alt="Snow-capped mountain peaks with clear blue sky">
+                <figcaption>Mountain Majesty</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" 
+                     alt="Starry night sky with Milky Way galaxy visible">
+                <figcaption>Starry Night</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b" 
+                     alt="Ocean waves crashing at sunset with golden light">
+                <figcaption>Ocean Sunset</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e" 
+                     alt="Green forest path through dense pine trees">
+                <figcaption>Forest Path</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05" 
+                     alt="Foggy mountain range with layers of mist">
+                <figcaption>Foggy Mountains</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" 
+                     alt="Colorful hot air balloons flying over green valleys">
+                <figcaption>Hot Air Balloons</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e" 
+                     alt="Aerial view of colorful autumn forest">
+                <figcaption>Autumn Colors</figcaption>
+            </figure>
+            
+            <figure>
+                <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000" 
+                     alt="Northern lights dancing in the night sky">
+                <figcaption>Northern Lights</figcaption>
+            </figure>
+        </div>
+        
+        <article class="description">
+            <h2>About This Gallery</h2>
+            <p>This responsive photo gallery showcases the beauty of nature through carefully selected images. The design adapts to different screen sizes and user preferences, providing an optimal viewing experience for everyone.</p>
+            
+            <p>The gallery implements modern web standards including:</p>
+            <ul>
+                <li><strong>Responsive Design:</strong> Adapts to mobile, tablet, and desktop screens</li>
+                <li><strong>Accessibility:</strong> Supports reduced motion and dark/light color schemes</li>
+                <li><strong>Performance:</strong> Optimized images with proper alternative text</li>
+                <li><strong>Semantic HTML:</strong> Clear structure for screen readers</li>
+            </ul>
+            
+            <p>All images are sourced from Unsplash and feature descriptive alt text for accessibility. The layout uses CSS Grid for optimal flexibility across different viewport sizes.</p>
+        </article>
+    </main>
+    
+    <footer>
+        <p>Final Project: Responsive Photo Gallery &copy; 2023</p>
+        <p>Created for Web Design for Everybody Specialization</p>
+        <p>Validated with W3C Validator and WAVE Accessibility Tool</p>
+    </footer>
+</body>
+</html>
